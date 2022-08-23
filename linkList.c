@@ -1,20 +1,20 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct Vector{
+typedef struct Node{
     int data;
-    struct Vector* nextNode;
-} Node;
+    struct Node* nextNode;
+} *Vector;
 
-Node* createNode(int value){
-    Node* newNode = (Node *) malloc(sizeof(Node));
+Vector createNode(int value){
+    Vector newNode = (Vector) malloc(sizeof(Vector));
     newNode->data = value;
     newNode->nextNode = NULL;
     return newNode;
 }
 
-void freeNode(Node* node){
-    Node *tempNode;
+void freeNode(Vector node){
+    Vector tempNode;
     while (node != NULL){
         tempNode = node;
         node = node->nextNode;
@@ -22,27 +22,27 @@ void freeNode(Node* node){
     }
 }
 
-Node* push_back(Node *newNode,int value){
-    Node* tempNode = createNode(value);
+Vector push_back(Vector newNode,int value){
+    Vector tempNode = createNode(value);
     if(newNode == NULL) newNode = tempNode;
     else{
-        Node *curentNode = newNode;
+        Vector curentNode = newNode;
         if (curentNode->nextNode != NULL) curentNode = push_back(curentNode->nextNode,value);
         else curentNode->nextNode = tempNode;
     }
     return newNode;
 }
 
-Node* push_top(Node* newNode,int value){
-    Node* tempNode = createNode(value);
+Vector push_top(Vector newNode,int value){
+    Vector tempNode = createNode(value);
     tempNode->data = value;
     tempNode->nextNode = newNode;
     newNode = tempNode;
     return newNode;
 }
 
-Node* pop_back(Node* newNode){
-    Node* tempNode = newNode;
+Vector pop_back(Vector newNode){
+    Vector tempNode = newNode;
     while (tempNode->nextNode->nextNode != NULL)
     {
         tempNode = tempNode->nextNode;
@@ -51,9 +51,9 @@ Node* pop_back(Node* newNode){
     return tempNode;
 }
 
-int lenghtNode(Node* node){
+int lenghtNode(Vector node){
     int count = 0;
-    Node* tempNode = node;
+    Vector tempNode = node;
     while (tempNode != NULL){
         count++;
         tempNode = tempNode->nextNode;
@@ -61,8 +61,8 @@ int lenghtNode(Node* node){
     return count;
 }
 
-Node* assign(Node* newNode,int value){
-    Node* tempNode = newNode;
+Vector assign(Vector newNode,int value){
+    Vector tempNode = newNode;
     while (tempNode != NULL)
     {
         tempNode->data = value;
@@ -72,9 +72,9 @@ Node* assign(Node* newNode,int value){
     
 }
 
-Node* insert(Node* newNode,int index, int value){
-    Node* tempNode = newNode;
-    Node* tempNode1 = createNode(value);
+Vector insert(Vector newNode,int index, int value){
+    Vector tempNode = newNode;
+    Vector tempNode1 = createNode(value);
     if(index == 0){
         newNode = push_top(newNode,value);
     } else if(index == lenghtNode(newNode)){
@@ -91,7 +91,7 @@ Node* insert(Node* newNode,int index, int value){
     return newNode;
 }
 
-void printListNode(Node* node){
+void printVector(Vector node){
     while (node)
     {
         printf("%d\t",node->data);
@@ -102,29 +102,29 @@ void printListNode(Node* node){
 
 
 int main(int argc, char* argv[]){
-    Node* newNode = NULL;
-    newNode = push_back(newNode,1);
-    newNode = push_back(newNode,0);
-    newNode = push_back(newNode,6);
-    newNode = push_back(newNode,8);
-    printListNode(newNode);
+    Vector vector = NULL;
+    vector = push_back(vector,1);
+    vector = push_back(vector,0);
+    vector = push_back(vector,6);
+    vector = push_back(vector,8);
+    printVector(vector);
 
     // insert in any position
-    newNode = insert(newNode,3,88);
-    newNode = insert(newNode,lenghtNode(newNode),10);
-    newNode = insert(newNode,0,11);
-    newNode = insert(newNode,3,99);
-    printListNode(newNode);
+    vector = insert(vector,3,88);
+    vector = insert(vector,lenghtNode(vector),10);
+    vector = insert(vector,0,11);
+    vector = insert(vector,3,99);
+    printVector(vector);
 
 
-    assign(newNode,10);
-    printListNode(newNode);
+    assign(vector,10);
+    printVector(vector);
 
 
-    pop_back(newNode);
-    pop_back(newNode);
+    pop_back(vector);
+    pop_back(vector);
 
-    printListNode(newNode);
+    printVector(vector);
 
     return 0;
 }
